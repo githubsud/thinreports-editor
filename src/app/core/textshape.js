@@ -1111,3 +1111,23 @@ thin.core.TextShape.prototype.disposeInternal = function() {
   });
   delete this.textLineContainer_;
 };
+
+
+/**
+ * @return {string}
+ */
+thin.core.TextShape.prototype.getType = function() {
+  return 'text';
+};
+
+
+/**
+ * @return {Object}
+ */
+thin.core.TextShape.prototype.toHash = function() {
+  var hash = goog.base(this, 'toHash');
+
+  goog.object.set(hash, 'texts', this.getTextContent().split("\n"));
+
+  return hash;
+};

@@ -455,3 +455,31 @@ thin.core.ImageShape.prototype.disposeInternal = function() {
   goog.base(this, 'disposeInternal');
   this.disposeInternalForShape();
 };
+
+
+/**
+ * @return {null}
+ */
+thin.core.ImageShape.prototype.getStroke = function() {
+  return null;
+};
+
+
+/**
+ * @return {null}
+ */
+thin.core.ImageShape.prototype.getFill = function() {
+  return null;
+};
+
+
+/**
+ * @return {Object}
+ */
+thin.core.ImageShape.prototype.toHash = function() {
+  var hash = this.toHash_();
+
+  goog.object.set(hash, 'data', this.getFile().getContent());
+
+  return hash;
+};

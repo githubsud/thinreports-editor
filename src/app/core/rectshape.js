@@ -386,3 +386,18 @@ thin.core.RectShape.prototype.disposeInternal = function() {
   thin.core.RectShape.superClass_.disposeInternal.call(this);
   this.disposeInternalForShape();
 };
+
+
+/**
+ * @return {Object}
+ */
+thin.core.RectShape.prototype.toHash = function() {
+  var hash = this.toHash_();
+
+  goog.object.extend(hash, {
+    'rx': this.getRounded(),
+    'ry': this.getRounded()
+  });
+
+  return hash;
+};

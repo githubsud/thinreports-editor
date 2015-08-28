@@ -1905,3 +1905,41 @@ thin.core.TblockShape.prototype.disposeInternal = function() {
   delete this.referringShapes_;
   delete this.formatStyle_;
 };
+
+/**
+ * @return {string}
+ */
+thin.core.TblockShape.prototype.getType = function() {
+  return 'text-block';
+};
+
+
+/**
+ * @return {Object}
+ */
+thin.core.TblockShape.prototype.toHash = function() {
+  var hash = goog.base(this, 'toHash');
+
+  var format = {
+    'base': this.getBaseFormat(),
+    'type': this.getFormatType()
+  };
+
+  if (this.formatStyle_) {
+    goog.object.extend(format, this.formatStyle_.toHash());
+  }
+
+  goog.object.extend(hash, {
+    'reference-id': this.getRefId(),
+    'value': this.getDefaultValueOfLink(),
+    'mulitple-line': this.isMultiMode(),
+    'format': format
+  });
+
+  goog.object.extend(hash['style'], {
+    'overflow': this.getOverflowType(),
+    'word-wrap': this.getTextWordWrap()
+  });
+
+  return hash;
+};

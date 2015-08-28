@@ -688,3 +688,75 @@ thin.core.ImageblockShape.prototype.disposeInternal = function() {
   delete this.positionX_;
   delete this.positionY_;
 };
+
+
+/**
+ * @return {string}
+ */
+thin.core.ImageblockShape.prototype.getPositionXToHash = function() {
+  return this.getPositionX();
+};
+
+
+/**
+ * @return {string}
+ */
+thin.core.ImageblockShape.prototype.getPositionYToHash = function() {
+  var postionYToHash = '';
+  var postionYType = thin.core.ImageblockShape.PositionY;
+
+  // SVG: top, center, bottom
+  // TLF: top, middle, bottom
+  switch(this.getPositionY()) {
+    case postionYType.CENTER:
+      postionYToHash = 'middle';
+      break;
+    case postionYType.BOTTOM:
+      postionYToHash = postionYType.BOTTOM;
+      break;
+    default:
+      postionYToHash = postionYType.TOP;
+      break;
+  }
+
+  return postionYToHash;
+};
+
+
+/**
+ * @return {null}
+ */
+thin.core.ImageblockShape.prototype.getStroke = function() {
+  return null;
+};
+
+
+/**
+ * @return {null}
+ */
+thin.core.ImageblockShape.prototype.getFill = function() {
+  return null;
+};
+
+
+/**
+ * @return {string}
+ */
+thin.core.ImageblockShape.prototype.getType = function() {
+  return 'image-block';
+};
+
+
+/**
+ * @return {Object}
+ */
+thin.core.ImageblockShape.prototype.toHash = function() {
+  var hash = this.toHash_();
+
+  goog.object.extend(hash['style'], {
+    'position-x': this.getPositionXToHash(),
+    'position-y': this.getPositionYToHash()
+  });
+
+  return hash;
+};

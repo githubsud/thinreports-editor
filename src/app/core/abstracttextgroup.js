@@ -303,6 +303,15 @@ thin.core.AbstractTextGroup.prototype.getTextLineHeightRatio = function() {
 /**
  * @return {string}
  */
+thin.core.AbstractTextGroup.prototype.getTextLineHeight = function() {
+  return /** @type {string} */ (thin.getValIfNotDef(this.getLayout().getElementAttribute(
+      this.getElement(), 'x-line-height'), thin.core.TextStyle.DEFAULT_LINEHEIGHT));
+};
+
+
+/**
+ * @return {string}
+ */
 thin.core.AbstractTextGroup.prototype.getKerning = function() {
   return /** @type {string} */ (thin.getValIfNotDef(this.textStyle_.getKerning(),
              thin.core.TextStyle.DEFAULT_KERNING));
@@ -398,4 +407,79 @@ thin.core.AbstractTextGroup.prototype.disposeInternal = function() {
 
   delete this.fontStyle_;
   delete this.textStyle_;
+};
+
+
+/**
+ * @return {string}
+ */
+thin.core.AbstractTextGroup.prototype.getTextAnchorToHash = function() {
+  var textAlignToHash = '';
+  var horizonAlignType = thin.core.TextStyle.HorizonAlignType;
+
+  // SVG: start, middle, end
+  // TLF: left, center, right
+  switch(this.getTextAnchor()) {
+    case horizonAlignType.MIDDLE:
+      textAlignToHash = 'center';
+      break;
+    case horizonAlignType.END:
+      textAlignToHash = 'right';
+      break;
+    default:
+      textAlignToHash = 'left';
+      break;
+  }
+
+  return textAlignToHash;
+};
+
+
+/**
+ * @return {string}
+ */
+thin.core.AbstractTextGroup.prototype.getVerticalAlignToHash = function() {
+  var verticalAlignToHash = '';
+  var verticalAlignType = thin.core.TextStyle.VerticalAlignType;
+
+  // SVG: top, center, bottom
+  // TLF: top, middle, bottom
+  switch(this.getVerticalAlign()) {
+    case verticalAlignType.CENTER:
+      verticalAlignToHash = 'middle';
+      break;
+    case verticalAlignType.BOTTOM:
+      verticalAlignToHash = verticalAlignType.BOTTOM;
+      break;
+    default:
+      verticalAlignToHash = verticalAlignType.TOP;
+      break;
+  }
+
+  return verticalAlignToHash;
+};
+
+
+/**
+ * @return {Object}
+ */
+thin.core.AbstractTextGroup.prototype.toHash = function() {
+  var hash = this.toHash_();
+
+  goog.object.extend(hash['style'], {
+    'font-family': this.getFontFamily(),
+    'font-size': this.getFontSize(),
+    'color': goog.object.get(hash['style'], 'fill-color'),
+    'text-align': this.getTextAnchorToHash(),
+    'vertical-align': this.getVerticalAlignToHash(),
+    // default is blank
+    'line-height': this.getTextLineHeight(),
+    'line-height-ratio': this.getTextLineHeightRatio(),
+    'letter-spacing': this.getKerning()
+  });
+  goog.object.extend(hash['style'], this.fontStyle_.toHash());
+
+  goog.object.remove(hash['style'], 'fill-color');
+
+  return hash;
 };

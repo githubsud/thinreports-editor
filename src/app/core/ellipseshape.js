@@ -351,3 +351,22 @@ thin.core.EllipseShape.prototype.disposeInternal = function() {
   thin.core.EllipseShape.superClass_.disposeInternal.call(this);
   this.disposeInternalForShape();
 };
+
+
+/**
+ * @return {Object}
+ */
+thin.core.EllipseShape.prototype.toHash = function() {
+  var hash = this.toHash_();
+
+  var radius = this.getRadius();
+  goog.object.extend(hash, {
+    'rx': radius.x,
+    'ry': radius.y
+  });
+
+  goog.object.remove(hash, 'width');
+  goog.object.remove(hash, 'height');
+
+  return hash;
+};

@@ -895,3 +895,27 @@ thin.core.PageNumberShape.Label_.prototype.disposeInternal = function() {
   goog.base(this, 'disposeInternal');
   delete this.parent_;
 };
+
+
+/**
+ * @return {string}
+ */
+thin.core.PageNumberShape.prototype.getType = function() {
+  return 'page-number';
+};
+
+
+/**
+ * @return {Object}
+ */
+thin.core.PageNumberShape.prototype.toHash = function() {
+  var hash = goog.base(this, 'toHash');
+
+  goog.object.extend(hash, {
+    'format': this.getFormat(),
+    'target': this.getTargetId() || 'report'
+  });
+  goog.object.set(hash['style'], 'overflow', this.getOverflowType());
+
+  return hash;
+};

@@ -351,3 +351,27 @@ thin.core.LineShape.prototype.disposeInternal = function() {
   thin.core.LineShape.superClass_.disposeInternal.call(this);
   this.disposeInternalForShape();
 };
+
+
+/**
+ * @return {Object}
+ */
+thin.core.LineShape.prototype.toHash = function() {
+  var hash = this.toHash_();
+
+  var layout  = this.getLayout();
+  var element = this.getElement();
+  goog.object.extend(hash, {
+    'x1': Number(layout.getElementAttribute(element, 'x1')),
+    'y1': Number(layout.getElementAttribute(element, 'y1')),
+    'x2': Number(layout.getElementAttribute(element, 'x2')),
+    'y2': Number(layout.getElementAttribute(element, 'y2'))
+  });
+
+  goog.object.remove(hash, 'x');
+  goog.object.remove(hash, 'y');
+  goog.object.remove(hash, 'width');
+  goog.object.remove(hash, 'height');
+
+  return hash;
+};

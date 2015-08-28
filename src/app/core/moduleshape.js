@@ -1223,3 +1223,49 @@ thin.core.ModuleShape.prototype.setSectionEnabled = function(
 thin.core.ModuleShape.prototype.isIntersects = function(judgement_box) {
   return goog.math.Box.intersects(judgement_box, this.getBoxSize());
 };
+
+
+/**
+ * @this {goog.graphics.Element}
+ * @return {string}
+ */
+thin.core.ModuleShape.prototype.getType = function() {
+  return this.getElement().tagName;
+};
+
+
+/**
+ * @private
+ * @this {goog.graphics.Element}
+ * @return {Object}
+ */
+thin.core.ModuleShape.prototype.toHash_ = function() {
+  var style = {
+    'display': this.getDisplay()
+  };
+
+  var stroke = this.getStroke();
+  if (stroke) {
+    goog.object.extend(style, {
+      'border-color': stroke.getColor(),
+      'border-width': this.getStrokeWidth(),
+      'border-style': this.getStrokeDashType()
+    });
+  }
+  var fill = this.getFill();
+  if (fill) {
+    goog.object.set(style, 'fill-color', fill.getColor());
+  }
+
+  return {
+    'id': this.getShapeId(),
+    'type': this.getType(),
+    'description': this.getDesc(),
+    // Absolute positions(without translate)
+    'x': this.left_,
+    'y': this.top_,
+    'width': this.width_,
+    'height': this.height_,
+    'style': style
+  };
+};
