@@ -479,7 +479,14 @@ thin.core.ImageShape.prototype.getFill = function() {
 thin.core.ImageShape.prototype.toHash = function() {
   var hash = this.toHash_();
 
-  goog.object.set(hash, 'data', this.getFile().getContent());
+  // data:image/png;base64,xxxxxxxx
+  var content = this.getFile().getContent();
+  if (/^data:(.+?);base64,(.+)/.test(content)) {
+    goog.object.set(hash, 'data', {
+      'mime-type': RegExp.$1,
+      'base64': RegExp.$2
+    });
+  }
 
   return hash;
 };
