@@ -45,54 +45,18 @@ goog.inherits(thin.core.AbstractTextGroup, thin.core.AbstractBoxGroup);
 
 
 /**
- * The latest fill applied to this element.
- * @type {goog.graphics.Fill?}
- * @protected
- */
-thin.core.AbstractTextGroup.prototype.fill = null;
-
-
-/**
- * The latest stroke applied to this element.
- * @type {goog.graphics.Stroke?}
- * @private
- */
-thin.core.AbstractTextGroup.prototype.stroke_ = null;
-
-
-/**
  * Sets the fill for this element.
- * @param {goog.graphics.Fill?} fill The fill object.
  */
-thin.core.AbstractTextGroup.prototype.setFill = function(fill) {
-  this.fill = fill;
-  this.getLayout().setElementFill(this, fill);
-};
-
-
-/**
- * @return {goog.graphics.Fill?} fill The fill object.
- */
-thin.core.AbstractTextGroup.prototype.getFill = function() {
-  return this.fill;
+thin.core.AbstractTextGroup.prototype.setFillInternal = function() {
+  this.getLayout().setElementFill(this, this.fill);
 };
 
 
 /**
  * Sets the stroke for this element.
- * @param {goog.graphics.Stroke?} stroke The stroke object.
  */
-thin.core.AbstractTextGroup.prototype.setStroke = function(stroke) {
-  this.stroke_ = stroke;
-  this.getLayout().setElementStroke(this, stroke);
-};
-
-
-/**
- * @return {goog.graphics.Stroke?} stroke The stroke object.
- */
-thin.core.AbstractTextGroup.prototype.getStroke = function() {
-  return this.stroke_;
+thin.core.AbstractTextGroup.prototype.setStrokeInternal = function() {
+  this.getLayout().setElementStroke(this, this.stroke_);
 };
 
 

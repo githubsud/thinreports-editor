@@ -953,3 +953,32 @@ thin.core.ListShape.prototype.disposeInternal = function() {
   delete this.activeshapes_;
   delete this.sectionShapes_;
 };
+
+
+/**
+ * @return {string}
+ */
+thin.core.ListShape.prototype.getType = function() {
+  return 'list';
+};
+
+
+/**
+ * @return {Object}
+ */
+thin.core.ListShape.prototype.toHash = function() {
+  var hash = this.toHash_();
+  var header = this.getSectionShape(
+    thin.core.ListHelper.SectionName.HEADER);
+
+  goog.object.extend(hash, {
+    'content-height': this.getHeight() - header.getHeight(),
+    'auto-page-break': this.isChangingPage()
+  });
+
+  this.forEachSectionShape(function(section, name) {
+    goog.object.set(hash, section.getType(), section.toHash());
+  });
+
+  return hash;
+};

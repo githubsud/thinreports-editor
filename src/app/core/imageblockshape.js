@@ -724,22 +724,6 @@ thin.core.ImageblockShape.prototype.getPositionYToHash = function() {
 
 
 /**
- * @return {null}
- */
-thin.core.ImageblockShape.prototype.getStroke = function() {
-  return null;
-};
-
-
-/**
- * @return {null}
- */
-thin.core.ImageblockShape.prototype.getFill = function() {
-  return null;
-};
-
-
-/**
  * @return {string}
  */
 thin.core.ImageblockShape.prototype.getType = function() {

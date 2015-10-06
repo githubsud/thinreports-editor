@@ -326,6 +326,52 @@ thin.core.ListSectionShape.prototype.disposeInternal = function() {
 };
 
 
+thin.core.ListSectionShape.prototype.getType = function() {
+  return thin.core.ListShape.ClassIds[this.getSectionName()].replace(/^\-/, '');
+};
+
+
+/**
+ * @return {Object}
+ */
+thin.core.ListSectionShape.prototype.toHash = function() {
+  var hash = {
+    'enabled': this.isEnabled(),
+    'height': this.height_
+  };
+
+  // NOTE: Not optimized for Generator
+  var transform = this.getGroup().getTransform();
+  // var translateY = transform.getTranslateY();
+  // var detailSection = this.affiliationGroup_.getSectionShape(
+  //   thin.core.ListHelper.SectionName.DETAIL);
+  // var diffTranslateYToDetailTop = this.getTop() - detailSection.getTop();
+
+  // if (diffTranslateYToDetailTop > 0) {
+  //   translateY = translateY - diffTranslateYToDetailTop;
+  // }
+
+  var shapes = this.getManager().getShapesManager().getClone();
+  if (this.isEnabled()) {
+    var objects = goog.array.map(shapes, function(shape, i) {
+      return shape.toHash();
+    });
+  } else {
+    var objects = [];
+  }
+
+  goog.object.extend(hash, {
+    'translate': {
+      'x': transform.getTranslateX(),
+      'y': transform.getTranslateY()
+    },
+    'objects': objects
+  });
+
+  return hash;
+};
+
+
 /**
  * @param {thin.core.Layout} layout
  * @param {thin.core.ListShape} affiliationGroup
@@ -481,6 +527,18 @@ thin.core.DetailSectionShape.prototype.updateProperties = function() {
     this.createPropertyComponent_();
   }
   proppane.getPropertyControl('section-detail-height').setValue(this.height_);
+};
+
+
+/**
+ * @return {Object}
+ */
+thin.core.DetailSectionShape.prototype.toHash = function() {
+  var hash = goog.base(this, 'toHash');
+
+  goog.object.remove(hash, 'enabled');
+
+  return hash;
 };
 
 
