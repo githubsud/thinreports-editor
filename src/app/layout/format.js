@@ -104,15 +104,17 @@ thin.layout.Format.prototype.toJSON = function() {
   if (this.isOverWritableVersion_) {
     this.version_ = thin.getVersion();
   }
-  
-  return goog.json.serialize({
+
+  var hash = {
     "version": this.version_,
-    "config": this.page.toHash(),
-    "svg": this.svg_,
+    "objects": this.svg_,
     "state": {
       "layout-guide": this.getLayoutGuides()
     }
-  });
+  };
+  goog.object.extend(hash, this.page.toHash());
+
+  return goog.json.serialize(hash);
 };
 
 
@@ -157,7 +159,7 @@ thin.layout.Format.prototype.setLayoutGuides = function(guides) {
 
 
 /**
- * @param {string} svg
+ * @param {Object} svg
  */
 thin.layout.Format.prototype.setSvg = function(svg) {
   this.svg_ = svg;

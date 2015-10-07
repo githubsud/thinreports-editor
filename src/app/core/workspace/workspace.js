@@ -671,7 +671,7 @@ thin.core.Workspace.prototype.setFormat = function(format) {
 thin.core.Workspace.prototype.getSaveFormat_ = function() {
   var layout = this.layout_;
   var format = this.format;
-  format.setSvg(layout.toXML());
+  format.setSvg(layout.toHash());
   format.setLayoutGuides(layout.getHelpers().getLayoutGuideHelper().getGuides());
   return format.toJSON();
 };

@@ -258,28 +258,28 @@ thin.layout.FormatPage.prototype.setMargin = function(top, right, bottom, left) 
  * @return {Object}
  */
 thin.layout.FormatPage.prototype.toHash = function() {
-  var hash = {
-    "title": this.title_,
-    "option": {}
-  };
-  
-  var page = {
+  var report = {
     "paper-type": this.getPaperType(),
     "orientation": this.getOrientation(),
-    "margin-top": this.marginTop_,
-    "margin-bottom": this.marginBottom_,
-    "margin-left": this.marginLeft_,
-    "margin-right": this.marginRight_
-  }
+    "margin": [
+      this.marginTop_,
+      this.marginRight_,
+      this.marginBottom_,
+      this.marginLeft_
+    ]
+  };
 
   if (this.isUserType()) {
-    page["width"] = this.getWidth();
-    page["height"] = this.getHeight();
+    goog.object.extend(report, {
+      "width": this.getWidth(),
+      "height": this.getHeight()
+    });
   }
-  
-  hash["page"] = page;
 
-  return hash;
+  return {
+    "title": this.title_,
+    "report": report
+  };
 };
 
 

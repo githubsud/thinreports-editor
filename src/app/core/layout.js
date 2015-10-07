@@ -389,6 +389,17 @@ thin.core.Layout.prototype.createHelpersElement = function(tagName, attrs) {
 
 
 /**
+ * @return {Object}
+ */
+thin.core.Layout.prototype.toHash = function() {
+  var shapes = this.getManager().getShapesManager().get();
+  return goog.array.map(shapes, function(shape, i) {
+    return shape.toHash();
+  });
+};
+
+
+/**
  * @return {string}
  */
 thin.core.Layout.prototype.toXML = function() {
