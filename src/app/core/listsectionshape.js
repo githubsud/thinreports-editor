@@ -373,6 +373,32 @@ thin.core.ListSectionShape.prototype.toHash = function() {
 
 
 /**
+ * @param {Object} attrs
+ */
+thin.core.ListSectionShape.prototype.update = function(attrs) {
+  goog.object.forEach(attrs, function(value, attr) {
+    switch (attr) {
+      case 'enabled':
+        this.setEnabled(value);
+        break;
+      case 'height':
+        this.setHeight(value);
+        break;
+      case 'translate':
+        this.setTransLate(new goog.math.Coordinate(
+          value['x'], value['y']));
+        break;
+      case 'objects':
+        this.getLayout().drawShapes(value, this);
+        break;
+      default:
+        break;
+      }
+  }, this);
+};
+
+
+/**
  * @param {thin.core.Layout} layout
  * @param {thin.core.ListShape} affiliationGroup
  * @param {string} sectionName

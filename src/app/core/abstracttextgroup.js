@@ -400,6 +400,31 @@ thin.core.AbstractTextGroup.prototype.getTextAnchorToHash = function() {
 
 
 /**
+ * @param {string} textAlignToHash
+ */
+thin.core.AbstractTextGroup.prototype.setTextAnchorFromHash = function(textAlignToHash) {
+  var anchor = '';
+  var horizonAlignType = thin.core.TextStyle.HorizonAlignType;
+
+  // SVG: start, middle, end
+  // TLF: left, center, right
+  switch(textAlignToHash) {
+    case 'center':
+      anchor = horizonAlignType.MIDDLE;
+      break;
+    case 'right':
+      anchor = horizonAlignType.END;
+      break;
+    default:
+      anchor = horizonAlignType.START;
+      break;
+  }
+
+  this.setTextAnchor(anchor);
+};
+
+
+/**
  * @return {string}
  */
 thin.core.AbstractTextGroup.prototype.getVerticalAlignToHash = function() {
@@ -425,6 +450,28 @@ thin.core.AbstractTextGroup.prototype.getVerticalAlignToHash = function() {
 
 
 /**
+ * @param {string} verticalAlignToHash
+ */
+thin.core.AbstractTextGroup.prototype.setVerticalAlignFromHash = function(verticalAlignToHash) {
+  var valign = '';
+  var verticalAlignType = thin.core.TextStyle.VerticalAlignType;
+
+  // SVG: top, center, bottom
+  // TLF: top, middle, bottom
+  switch(verticalAlignToHash) {
+    case 'middle':
+      valign = verticalAlignType.CENTER;
+      break;
+    default:
+      valign = verticalAlignToHash;
+      break;
+  }
+
+  this.setVerticalAlign(valign);
+};
+
+
+/**
  * @return {Object}
  */
 thin.core.AbstractTextGroup.prototype.toHash = function() {
@@ -446,4 +493,58 @@ thin.core.AbstractTextGroup.prototype.toHash = function() {
   goog.object.remove(hash['style'], 'fill-color');
 
   return hash;
+};
+
+
+/**
+ * @param {Object} attrs
+ */
+thin.core.AbstractTextGroup.prototype.update = function(attrs) {
+  this.update_(attrs);
+
+  goog.object.forEach(attrs, function(value, attr) {
+    switch (attr) {
+      case 'font-family':
+        this.setFontFamily(value);
+        break;
+      case 'font-size':
+        this.setFontSize(value);
+        break;
+      case 'color':
+        this.setFillColor(value);
+        break;
+      case 'text-align':
+        this.setTextAnchorFromHash(value);
+        break;
+      case 'vertical-align':
+        this.setVerticalAlignFromHash(value);
+        break;
+      case 'line-height-ratio':
+        this.setTextLineHeightRatio(value);
+        break;
+      case 'letter-spacing':
+        this.setKerning(value);
+        break;
+      case 'font-style':
+        goog.array.forEach(value, function(font_style) {
+          switch(font_style) {
+            case 'bold':
+              this.setFontBold(true);
+              break;
+            case 'italic':
+              this.setFontItalic(true);
+              break;
+            case 'linethrough':
+              this.setFontLinethrough(true);
+              break;
+            case 'underline':
+              this.setFontUnderline(true);
+              break;
+            }
+        }, this);
+      default:
+        // Do Nothing
+        break;
+      }
+  }, this);
 };

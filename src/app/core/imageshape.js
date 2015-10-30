@@ -82,24 +82,6 @@ thin.core.ImageShape.prototype.getClassId = function() {
 
 
 /**
- * @param {Element} element
- * @param {thin.core.Layout} layout
- * @param {thin.core.ShapeIdManager=} opt_shapeIdManager
- * @return {thin.core.ImageShape}
- */
-thin.core.ImageShape.createFromElement = function(element, layout, opt_shapeIdManager) {
-  var shape = new thin.core.ImageShape(element, layout);
-  shape.setShapeId(layout.getElementAttribute(element, 'x-id'), opt_shapeIdManager);
-  shape.setDisplay(layout.getElementAttribute(element, 'x-display') == 'true');
-  shape.setDesc(layout.getElementAttribute(element, 'x-desc'));
-  shape.setFile(thin.core.ImageFile.createFromElement(element));
-  shape.initIdentifier();
-
-  return shape;
-};
-
-
-/**
  * @param {number} width
  * @param {number} height
  */
@@ -489,4 +471,28 @@ thin.core.ImageShape.prototype.toHash = function() {
   }
 
   return hash;
+};
+
+
+/**
+ * @param {Object} attrs
+ */
+thin.core.ImageShape.prototype.update = function(attrs) {
+  this.update_(attrs);
+
+  goog.object.forEach(attrs, function(value, attr) {
+    switch (attr) {
+      case 'data':
+        this.setSource(thin.core.ImageShape.createDataURISchema(value));
+        break;
+      default:
+        break;
+      }
+  }, this);
+};
+
+
+thin.core.ImageShape.createDataURISchema = function(factors) {
+  // data:<MIME-type>;base64,<base64 data>
+  return 'data:' + factors['mime-type'] + ';base64,' + factors['base64']
 };

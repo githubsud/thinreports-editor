@@ -63,27 +63,6 @@ thin.core.EllipseShape.prototype.getClassId = function() {
 };
 
 
-/**
- * @param {Element} element
- * @param {thin.core.Layout} layout
- * @param {thin.core.ShapeIdManager=} opt_shapeIdManager
- * @return {thin.core.EllipseShape}
- */
-thin.core.EllipseShape.createFromElement = function(element, layout, opt_shapeIdManager) {
-  var shape = new thin.core.EllipseShape(element, layout, 
-                new goog.graphics.Stroke(
-                      Number(layout.getElementAttribute(element, 'stroke-width')),
-                      layout.getElementAttribute(element, 'stroke')),
-                new goog.graphics.SolidFill(layout.getElementAttribute(element, 'fill')));
-  shape.setShapeId(layout.getElementAttribute(element, 'x-id'), opt_shapeIdManager);
-  shape.setDisplay(layout.getElementAttribute(element, 'x-display') == 'true');
-  shape.setDesc(layout.getElementAttribute(element, 'x-desc'));
-  shape.setStrokeDashFromType(layout.getElementAttribute(element, 'x-stroke-type'));
-  shape.initIdentifier();
-  return shape;
-};
-
-
 thin.core.EllipseShape.prototype.setDefaultOutline = function() {
   this.setTargetOutline(this.getLayout().getHelpers().getEllipseOutline());
 };
@@ -369,4 +348,25 @@ thin.core.EllipseShape.prototype.toHash = function() {
   goog.object.remove(hash, 'height');
 
   return hash;
+};
+
+
+/**
+ * @param {Object} attrs
+ */
+thin.core.EllipseShape.prototype.update = function(attrs) {
+  goog.object.forEach(attrs, function(value, attr) {
+    switch (attr) {
+      case 'rx':
+        this.setWidth(value);
+        break;
+      case 'ry':
+        this.setHeight(value);
+        break;
+      default:
+        break;
+      }
+  }, this);
+
+  this.update_(attrs);
 };
