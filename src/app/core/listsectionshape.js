@@ -351,10 +351,16 @@ thin.core.ListSectionShape.prototype.toHash = function() {
   //   translateY = translateY - diffTranslateYToDetailTop;
   // }
 
-  var shapes = this.getManager().getShapesManager().getClone();
   if (this.isEnabled()) {
-    var objects = goog.array.map(shapes, function(shape, i) {
-      return shape.toHash();
+    // TODO: DRY
+    var childNodes = this.getGroup().getElement().childNodes;
+    var identifiers = goog.array.map(childNodes, function(element, i) {
+      return element.getAttribute('id');
+    });
+
+    var manager = this.getManager().getShapesManager();
+    var objects = goog.array.map(identifiers, function(identifier, i) {
+      return manager.getShapeByIdentifier(identifier).toHash();
     });
   } else {
     var objects = [];
